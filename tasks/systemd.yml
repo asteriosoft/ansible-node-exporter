@@ -1,0 +1,23 @@
+---
+- name: Create sysconfig
+  template:
+    src: 'systemd/node_exporter.sysconfig.j2'
+    dest: '/etc/sysconfig/node_exporter'
+    owner: root
+    group: root
+    mode: 0644
+  register: result
+
+- name: Create systemd unit
+  template:
+    src: 'systemd/node_exporter.unit.j2'
+    dest: '/etc/systemd/system/node_exporter.service'
+    owner: root
+    group: root
+    mode: 0644
+  register: result
+
+- name: systemd reload
+  systemd:
+    daemon_reload: yes
+  when: result.changed

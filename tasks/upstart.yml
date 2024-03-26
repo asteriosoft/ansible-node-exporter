@@ -1,0 +1,9 @@
+---
+- name: Create service unit
+  template:
+    src: 'service/node_exporter.j2'
+    dest: '/etc/init.d/node_exporter'
+    owner: root
+    group: root
+    mode: 0554
+  notify: node_exporter restart

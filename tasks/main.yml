@@ -1,0 +1,56 @@
+---
+- name: Create user for exporter
+  user: 
+    name: '{{ user_name }}'
+
+- name: Creating sysconfig dir for exporter
+  file:
+    path: '/etc/sysconfig'
+    state: directory
+    mode: 0755
+
+- name: Getting exporter tarball
+  get_url:
+    url: 'https://github.com/prometheus/node_exporter/releases/download/v{{ version_exporter }}/node_exporter-{{ version_exporter }}.linux-{{ exporter_arch }}.tar.gz'
+    dest: '/tmp/node-exporter.tar.gz'
+    mode: 0444
+
+- name: Unpacking exporter tarball
+  unarchive:
+    src: '/tmp/node-exporter.tar.gz'
+    dest: '/usr/bin'
+    remote_src: yes
+    extra_opts: [--strip-components=1]
+    exclude:
+      - NOTICE
+      - LICENSE
+  ignore_errors: '{{ ansible_check_mode }}'
+  notify:
+    - node_exporter restart
+
+- name: Creating work dir for exporter
+  file:
+    path: '/var/lib/node_exporter/textfile_collector'
+    state: directory
+    owner: '{{ user_name }}'
+    group: '{{ user_name }}'
+    mode: 0755
+
+- name: Create systemd unit for exporter (depends on service_mgr)
+  import_tasks: 'systemd.yml'
+  when: ansible_service_mgr == 'systemd'
+  notify:
+    - node_exporter restart
+
+- name: Create sysv unit for exporter (depends on service_mgr)
+  import_tasks: 'upstart.yml'
+  when: ansible_service_mgr != 'systemd'
+  notify:
+    - node_exporter restart
+
+- name: Starting exporter
+  service:
+    name: node_exporter
+    enabled: yes
+    state: started
+  ignore_errors: '{{ ansible_check_mode }}'

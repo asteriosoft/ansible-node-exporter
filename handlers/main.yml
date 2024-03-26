@@ -1,0 +1,6 @@
+---
+- name: node_exporter restart
+  service:
+    name: node_exporter
+    state: restarted
+  ignore_errors: '{{ ansible_check_mode }}'
