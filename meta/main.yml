@@ -1,6 +1,6 @@
 galaxy_info:
   author: Asteriosoft DevOps Team
-  description: OS initialization role
+  description: Node-exporter installation
   company: Asteriosoft
 
   license: MIT
