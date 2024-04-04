@@ -23,7 +23,7 @@ start() {
     echo "$PROG is already running!"
   else
     echo -n "Starting $PROG: "
-    su {{ user_name }} -c "nohup $EXEC $OPTIONS >/dev/null 2>&1 &"
+    su {{ node_exporter_user }} -c "nohup $EXEC $OPTIONS >/dev/null 2>&1 &"
     RETVAL=$?
     [ $RETVAL -eq 0 ] && touch $LOCKFILE && success || failure
     echo

@@ -3,7 +3,7 @@ Description=Node Exporter
 After=network.target
 
 [Service]
-User={{ user_name }}
+User={{ node_exporter_user }}
 EnvironmentFile=/etc/sysconfig/node_exporter
 ExecStart=/usr/bin/node_exporter $OPTIONS
 

@@ -16,8 +16,8 @@ Example Playbook
   gather_facts: yes
 
   vars:
-    version_exporter: '1.5.0'
-    exporter_arch: 'amd64'
+    node_exporter_version: '1.5.0'
+    node_exporter_arch: 'amd64'
 
   roles:
     - node-exporter

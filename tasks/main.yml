@@ -1,7 +1,7 @@
 ---
 - name: Create user for exporter
   user: 
-    name: '{{ user_name }}'
+    name: '{{ node_exporter_user }}'
 
 - name: Creating sysconfig dir for exporter
   file:
@@ -11,7 +11,7 @@
 
 - name: Getting exporter tarball
   get_url:
-    url: 'https://github.com/prometheus/node_exporter/releases/download/v{{ version_exporter }}/node_exporter-{{ version_exporter }}.linux-{{ exporter_arch }}.tar.gz'
+    url: 'https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-{{ node_exporter_arch }}.tar.gz'
     dest: '/tmp/node-exporter.tar.gz'
     mode: 0444
 
@@ -32,8 +32,8 @@
   file:
     path: '/var/lib/node_exporter/textfile_collector'
     state: directory
-    owner: '{{ user_name }}'
-    group: '{{ user_name }}'
+    owner: '{{ node_exporter_user }}'
+    group: '{{ node_exporter_user }}'
     mode: 0755
 
 - name: Create systemd unit for exporter (depends on service_mgr)
